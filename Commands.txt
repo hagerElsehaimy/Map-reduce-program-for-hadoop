@@ -1,0 +1,34 @@
+cat sample.txt
+cat sample.txt | python mapper.py > output.txt
+cat sample.txt | python mapper.py | python reducer.py 
+chmod +x mapper.py 
+chmod +x reducer.py 
+
+cd $HADOOP_HOME
+jps
+sbin/start-all.sh
+jps
+
+hadoop dfs -mkdir -p /user/lobna
+hadoop dfs -ls
+
+hadoop dfs -put ~/Downloads/Task2/*.csv /user/lobna/
+
+hadoop jar $HADOOP_HOME/share/hadoop/tools/lib/hadoop-streaming-2.8.1.jar \
+-Dstream.num.map.output.key.field=2 \
+-input /user/lobna/Task/user.csv -input /user/lobna/Task/transaction.csv \
+-output /user/lobna/Task/output \
+-mapper ~/Downloads/Task2/join_mapper.py \
+-reducer ~/Downloads/Task2/join_reducer.py
+																																																																																																																																																																																																																																																																																																																																																																										
+
+hadoop fs -rmr /user/lobna/task2/*.txt
+
+hadoop dfs -ls /user/lobna/task2
+
+hadoop dfs -ls /user/lobna/task2/output
+
+hadoop dfs -cat /user/lobna/task2
+
+
+
